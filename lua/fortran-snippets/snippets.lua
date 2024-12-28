@@ -4,37 +4,7 @@ local s = ls.snippet
 local i = ls.insert_node
 local rep = require("luasnip.extras").rep
 
-local function derivedtype_snippet()
-    return s("nc", fmt([[
-module {}
-  implicit none
-  private
-  public :: {}
-  
-  type, extends({}) :: {}
-    ! Add components here
-  contains
-    {}
-  end type {}
-
-contains
-
-{}
-
-end module {}
-    ]], {
-        i(1),
-        i(2),
-        i(3),
-        rep(2),
-        i(4, "procedure_bindings"),
-        rep(2),
-        i(5, "implementations"),
-        rep(1),
-    }))
-end
-
-local function module_snippet()
+local function new_module_snippet()
     return s("nm", fmt([[
 module {}
   implicit none
@@ -47,9 +17,142 @@ end module {}
     }))
 end
 
+local function new_class_snippet()
+    return s("nc", fmt([[
+module {}
+  implicit none
+  private
+
+  public :: {}
+
+  type :: {}
+  contains
+    procedure :: cleanup => cleanup
+    procedure :: clear => clear
+  end type {}
+
+  interface {}
+    module procedure constructor
+  end interface {}
+contains
+  function constructor() result(this)
+    type({}) :: this
+
+    call this%clear()
+  end function constructor
+
+  subroutine cleanup(this)
+    class({}), intent(inout) :: this
+
+    call this%clear()
+  end subroutine cleanup
+
+  subroutine clear(this)
+    class({}), intent(inout) :: this
+
+  end subroutine clear
+end module {}
+    ]], {
+        i(1, "module_name"),
+        i(2, "type_name"),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(1),
+    }))
+end
+
+local function new_abstract_class_snippet()
+    return s("nabc", fmt([[
+module {}
+  implicit none
+  private
+
+  public :: {}
+
+  type, abstract :: {}
+  contains
+    procedure(empty), deferred :: cleanup
+  end type {}
+
+  abstract interface
+    subroutine empty(this)
+      import :: {}
+
+      class({}), intent(inout) :: this
+    end subroutine empty
+  end interface
+end module {}
+    ]], {
+        i(1, "module_name"),
+        i(2, "type_name"),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(1),
+    }))
+end
+
+local function new_extended_class_snippet()
+    return s("nec", fmt([[
+module {}
+  implicit none
+  private
+
+  public :: {}
+
+  type, extends({}) :: {}
+  contains
+    procedure :: cleanup => cleanup
+    procedure :: clear => clear
+  end type {}
+
+  interface {}
+    module procedure constructor
+  end interface {}
+contains
+  function constructor() result(this)
+    type({}) :: this
+
+    call this%clear()
+  end function constructor
+
+  subroutine cleanup(this)
+    class({}), intent(inout) :: this
+
+    call this%clear()
+  end subroutine cleanup
+
+  subroutine clear(this)
+    class({}), intent(inout) :: this
+
+  end subroutine clear
+end module {}
+    ]], {
+        i(1, "module_name"),
+        i(2, "type_name"),
+        i(3, "base_class"),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(2),
+        rep(1),
+    }))
+end
+
 local snippets = {
-    derivedtype_snippet,
-    module_snippet,
+    new_module_snippet,
+    new_class_snippet,
+    new_abstract_class_snippet,
+    new_extended_class_snippet,
 }
 
 local function get_snippets()
