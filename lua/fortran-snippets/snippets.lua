@@ -27,7 +27,9 @@ end module {}
         i(3, "base_class"),
         i(2, "type_name"),
         i(4, "procedure_bindings"),
+        i(2, "type_name"),
         i(5, "implementations"),
+        i(1, "module_name"),
     }))
 end
 
