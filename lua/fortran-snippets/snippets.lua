@@ -2,9 +2,10 @@ local ls = require("luasnip")
 local fmt = require("luasnip.extras.fmt").fmt
 local s = ls.snippet
 local i = ls.insert_node
+local rep = require("luasnip.extras").rep
 
 local function derivedtype_snippet()
-    return s("derivedtype", fmt([[
+    return s("nc", fmt([[
 module {}
   implicit none
   private
@@ -22,19 +23,19 @@ contains
 
 end module {}
     ]], {
-        i(1, "module_name"),
-        i(2, "type_name"),
-        i(3, "base_class"),
-        i(2, "type_name"),
+        i(1),
+        i(2),
+        i(3),
+        rep(2),
         i(4, "procedure_bindings"),
-        i(2, "type_name"),
+        rep(2),
         i(5, "implementations"),
-        i(1, "module_name"),
+        rep(1),
     }))
 end
 
 local function module_snippet()
-    return s("module", fmt([[
+    return s("nm", fmt([[
 module {}
   implicit none
   {}
@@ -42,7 +43,7 @@ end module {}
     ]], {
         i(1, "module_name"),
         i(2, "body"),
-        i(1),
+        rep(1),
     }))
 end
 
