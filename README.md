@@ -9,8 +9,7 @@ derived types, and more.
 ## Features
 
 - **Fortran-specific snippets**:
-  - `derivedtype`: Quickly create a derived type skeleton with proper bindings.
-  - More snippets to streamline Fortran development.
+  - Snippets to streamline modern Fortran development.
 - **Integration with LuaSnip**:
   - Uses [LuaSnip](https://github.com/L3MON4D3/LuaSnip) for snippet management.
 - **Easy installation**:
@@ -22,7 +21,7 @@ derived types, and more.
 
 ### Prerequisites
 
-- **Neovim 0.5+**: Required for Lua-based configuration and plugins.
+- **Neovim 0.10+**: Required for Lua-based configuration and plugins.
 - **LuaSnip**: This plugin relies on LuaSnip. Ensure it is installed.
 
 ### Installing with `packer.nvim`
@@ -36,7 +35,7 @@ derived types, and more.
 
        -- Install nvim-fortran-snippets
        use {
-           "your_username/nvim-fortran-snippets",
+           "gustav-jansen/nvim-fortran-snippets",
            config = function()
                require("fortran_snippets").setup()
            end,
