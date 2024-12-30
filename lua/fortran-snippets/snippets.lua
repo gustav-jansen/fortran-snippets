@@ -2,6 +2,8 @@ local ls = require("luasnip")
 local fmt = require("luasnip.extras.fmt").fmt
 local s = ls.snippet
 local i = ls.insert_node
+local t = ls.text_node
+local f = ls.function_node
 local rep = require("luasnip.extras").rep
 
 local function new_module_snippet()
@@ -98,6 +100,45 @@ end module {}
     }))
 end
 
+local function find_class(result, class)
+    for _, symbol in pairs(result[1].result) do
+        if symbol.name == class and symbol.kind == 5 then
+            return symbol
+        end
+    end
+    return nil
+end
+
+local function get_symbols(base_class)
+    local lresult = {}
+    local params = {
+        query = base_class
+    }
+
+    vim.lsp.buf_request_all(0, "workspace/symbol", params, function(result)
+        if not result or vim.tbl_isempty(result) then
+          table.insert(lresult, "No symbols found in the current document.")
+          return
+        end
+
+        local symbol = find_class(result, base_class)
+        if symbol then
+            table.insert(lresult, symbol.name)
+        end
+    end )
+
+    local success = vim.wait(500, function() return #lresult>0 end, 50)
+    if not success then
+        return "Nothing"
+    end
+
+    if #lresult > 0 then
+        return table.concat(lresult, ", ")
+    else
+        return "No symbols"
+    end
+end
+
 local function new_extended_dt_snippet()
     return s("nedt", fmt([[
 module {}
@@ -132,6 +173,8 @@ contains
     class({}), intent(inout) :: this
 
   end subroutine clear
+
+  {}
 end module {}
     ]], {
         i(1, "module_name"),
@@ -144,6 +187,7 @@ end module {}
         rep(2),
         rep(2),
         rep(2),
+        f(function() return get_symbols("string") end),
         rep(1),
     }))
 end
