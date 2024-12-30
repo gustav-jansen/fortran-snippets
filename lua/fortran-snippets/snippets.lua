@@ -17,8 +17,8 @@ end module {}
     }))
 end
 
-local function new_class_snippet()
-    return s("nc", fmt([[
+local function new_dt_snippet()
+    return s("ndt", fmt([[
 module {}
   implicit none
   private
@@ -66,8 +66,8 @@ end module {}
     }))
 end
 
-local function new_abstract_class_snippet()
-    return s("nabc", fmt([[
+local function new_abstract_dt_snippet()
+    return s("nadt", fmt([[
 module {}
   implicit none
   private
@@ -98,8 +98,8 @@ end module {}
     }))
 end
 
-local function new_extended_class_snippet()
-    return s("nec", fmt([[
+local function new_extended_dt_snippet()
+    return s("nedt", fmt([[
 module {}
   implicit none
   private
@@ -150,9 +150,9 @@ end
 
 local snippets = {
     new_module_snippet,
-    new_class_snippet,
-    new_abstract_class_snippet,
-    new_extended_class_snippet,
+    new_dt_snippet,
+    new_abstract_dt_snippet,
+    new_extended_dt_snippet,
 }
 
 local function get_snippets()
